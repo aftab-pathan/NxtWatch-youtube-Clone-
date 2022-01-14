@@ -7,6 +7,7 @@ import {SiYoutubegaming} from 'react-icons/si'
 import {AiFillHome, AiFillFire} from 'react-icons/ai'
 import Header from '../Header'
 import GamingVideoCard from '../GamingVideoCard'
+import nxtWatchContext from '../../Context/nxtWatchContext'
 
 import {
   HomeBgContainer,
@@ -108,19 +109,27 @@ class GamingRoute extends Component {
   }
 
   renderFailureView = () => (
-    <FailureContainer>
-      <FailureImg
-        src="https://assets.ccbp.in/frontend/react-js/nxt-watch-not-found-light-theme-img.png"
-        alt="not found"
-      />
-      <Heading>Oops! Something Went Wrong</Heading>
-      <Description>
-        We are having some trouble to complete your request. Please try again.
-      </Description>
-      <RetryBtn type="button" onClick={this.onClickFailRetry}>
-        Retry
-      </RetryBtn>
-    </FailureContainer>
+    <nxtWatchContext.Consumer>
+      {value => {
+        const {isDark} = value
+        const failSrc = isDark
+          ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-dark-theme-img.png'
+          : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
+        return (
+          <FailureContainer>
+            <FailureImg src={failSrc} alt="failure view" />
+            <Heading>Oops! Something Went Wrong</Heading>
+            <Description>
+              We are having some trouble to complete your request. Please try
+              again.
+            </Description>
+            <RetryBtn type="button" onClick={this.onClickFailRetry}>
+              Retry
+            </RetryBtn>
+          </FailureContainer>
+        )
+      }}
+    </nxtWatchContext.Consumer>
   )
 
   finalRenderView = () => {
@@ -139,68 +148,91 @@ class GamingRoute extends Component {
 
   render() {
     return (
-      <>
-        <Header />
-        <HomeBgContainer>
-          <HomeLargeLeftBottomContainer>
-            <HomeLargeLeftOptionsContainer>
-              <Link to="/">
-                <HomeLargeLeftOptions>
-                  <AiFillHome size={22} /> <OptionsText>Home</OptionsText>
-                </HomeLargeLeftOptions>
-              </Link>
-              <Link to="/trending">
-                <HomeLargeLeftOptions>
-                  <AiFillFire size={22} />
-                  <OptionsText>Trending</OptionsText>
-                </HomeLargeLeftOptions>
-              </Link>
-              <Link to="/gaming">
-                <HomeLargeLeftOptions>
-                  <SiYoutubegaming size={22} />
-                  <OptionsText>Gaming</OptionsText>
-                </HomeLargeLeftOptions>
-              </Link>
-              <Link to="/saved-videos">
-                <HomeLargeLeftOptions>
-                  <MdPlaylistAdd size={22} />
-                  <OptionsText>Saved videos</OptionsText>
-                </HomeLargeLeftOptions>
-              </Link>
-            </HomeLargeLeftOptionsContainer>
-            <HomeLargeLeftContactContainer>
-              <ContactText>CONTACT US</ContactText>
-              <ContactLogoContainer>
-                <ContactLogo
-                  src="https://assets.ccbp.in/frontend/react-js/nxt-watch-facebook-logo-img.png"
-                  alt="facebook logo"
-                />
-                <ContactLogo
-                  src="https://assets.ccbp.in/frontend/react-js/nxt-watch-twitter-logo-img.png"
-                  alt="twitter logo"
-                />
-                <ContactLogo
-                  src="https://assets.ccbp.in/frontend/react-js/nxt-watch-linked-in-logo-img.png"
-                  alt="linked in logo"
-                />
-              </ContactLogoContainer>
-              <ContactDescription>
-                Enjoy! Now to see your channels and recommendations!
-              </ContactDescription>
-            </HomeLargeLeftContactContainer>
-          </HomeLargeLeftBottomContainer>
+      <nxtWatchContext.Consumer>
+        {value => {
+          const {isDark} = value
+          const bgColor = isDark ? '#0f0f0f' : '#f9f9f9'
+          const bgMainColor = isDark ? '#231f20' : '#f9f9f9'
+          const bgBannerColor = isDark ? '#424242' : '#ebebeb'
+          const textColor = isDark ? '#f9f9f9' : '#181818'
+          return (
+            <>
+              <Header />
+              <HomeBgContainer bgColor={bgColor} data-testid="gaming">
+                <HomeLargeLeftBottomContainer>
+                  <HomeLargeLeftOptionsContainer>
+                    <Link to="/">
+                      <HomeLargeLeftOptions>
+                        <AiFillHome size={22} color={textColor} />{' '}
+                        <OptionsText textColor={textColor}>Home</OptionsText>
+                      </HomeLargeLeftOptions>
+                    </Link>
+                    <Link to="/trending">
+                      <HomeLargeLeftOptions>
+                        <AiFillFire size={22} color={textColor} />
+                        <OptionsText textColor={textColor}>
+                          Trending
+                        </OptionsText>
+                      </HomeLargeLeftOptions>
+                    </Link>
+                    <Link to="/gaming">
+                      <HomeLargeLeftOptions>
+                        <SiYoutubegaming size={22} color={textColor} />
+                        <OptionsText textColor={textColor}>Gaming</OptionsText>
+                      </HomeLargeLeftOptions>
+                    </Link>
+                    <Link to="/saved-videos">
+                      <HomeLargeLeftOptions>
+                        <MdPlaylistAdd size={22} color={textColor} />
+                        <OptionsText textColor={textColor}>
+                          Saved videos
+                        </OptionsText>
+                      </HomeLargeLeftOptions>
+                    </Link>
+                  </HomeLargeLeftOptionsContainer>
+                  <HomeLargeLeftContactContainer>
+                    <ContactText textColor={textColor}>CONTACT US</ContactText>
+                    <ContactLogoContainer>
+                      <ContactLogo
+                        src="https://assets.ccbp.in/frontend/react-js/nxt-watch-facebook-logo-img.png"
+                        alt="facebook logo"
+                      />
+                      <ContactLogo
+                        src="https://assets.ccbp.in/frontend/react-js/nxt-watch-twitter-logo-img.png"
+                        alt="twitter logo"
+                      />
+                      <ContactLogo
+                        src="https://assets.ccbp.in/frontend/react-js/nxt-watch-linked-in-logo-img.png"
+                        alt="linked in logo"
+                      />
+                    </ContactLogoContainer>
+                    <ContactDescription textColor={textColor}>
+                      Enjoy! Now to see your channels and recommendations!
+                    </ContactDescription>
+                  </HomeLargeLeftContactContainer>
+                </HomeLargeLeftBottomContainer>
 
-          <HomeLargeRightBottomContainer>
-            <PremiumBanner>
-              <PremiumLeftContainer>
-                <SiYoutubegaming size={32} color="#ff0000" />
-              </PremiumLeftContainer>
-              <PremiumBannerText>Gaming</PremiumBannerText>
-            </PremiumBanner>
-            <HomeBottomContainer>{this.finalRenderView()}</HomeBottomContainer>
-          </HomeLargeRightBottomContainer>
-        </HomeBgContainer>
-      </>
+                <HomeLargeRightBottomContainer>
+                  <PremiumBanner
+                    bgBannerColor={bgBannerColor}
+                    data-testid="banner"
+                  >
+                    <PremiumLeftContainer>
+                      <SiYoutubegaming size={32} color="#ff0000" />
+                    </PremiumLeftContainer>
+                    <PremiumBannerText textColor={textColor}>
+                      Gaming
+                    </PremiumBannerText>
+                  </PremiumBanner>
+                  <HomeBottomContainer bgMainColor={bgMainColor}>
+                    {this.finalRenderView()}
+                  </HomeBottomContainer>
+                </HomeLargeRightBottomContainer>
+              </HomeBgContainer>
+            </>
+          )
+        }}
+      </nxtWatchContext.Consumer>
     )
   }
 }

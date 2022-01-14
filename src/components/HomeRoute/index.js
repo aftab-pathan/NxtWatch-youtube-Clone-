@@ -106,6 +106,10 @@ class HomeRoute extends Component {
     this.getHomeData()
   }
 
+  onClickRetry = () => {
+    this.getHomeData()
+  }
+
   renderNoSearch = () => (
     <FailureContainer>
       <FailureImg
@@ -114,7 +118,7 @@ class HomeRoute extends Component {
       />
       <Heading>No Search results found</Heading>
       <Description>Try different key words or remove search filter</Description>
-      <RetryBtn>Retry</RetryBtn>
+      <RetryBtn onClickRetry={this.onClickRetry}>Retry</RetryBtn>
     </FailureContainer>
   )
 
@@ -150,12 +154,12 @@ class HomeRoute extends Component {
       {value => {
         const {isDark} = value
         const textColor = isDark ? '#f9f9f9' : '#181818'
+        const failSrc = isDark
+          ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-dark-theme-img.png'
+          : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
         return (
           <FailureContainer>
-            <FailureImg
-              src="https://assets.ccbp.in/frontend/react-js/nxt-watch-not-found-light-theme-img.png"
-              alt="not found"
-            />
+            <FailureImg src={failSrc} alt="failure view" />
             <Heading textColor={textColor}>Oops! Something Went Wrong</Heading>
             <Description textColor={textColor}>
               We are having some trouble to complete your request. Please try
@@ -196,7 +200,7 @@ class HomeRoute extends Component {
           return (
             <>
               <Header />
-              <HomeBgContainer bgColor={bgColor}>
+              <HomeBgContainer bgColor={bgColor} data-testid="home">
                 <HomeLargeLeftBottomContainer>
                   <HomeLargeLeftOptionsContainer>
                     <Link to="/">
@@ -251,11 +255,11 @@ class HomeRoute extends Component {
                 </HomeLargeLeftBottomContainer>
 
                 <HomeLargeRightBottomContainer>
-                  <PremiumBanner>
+                  <PremiumBanner data-testid="banner">
                     <PremiumLeftContainer>
                       <Logo
                         src="https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png"
-                        alt="website logo"
+                        alt="nxt watch logo"
                       />
                       <PremiumBannerText>
                         Buy Nxt Watch Premium prepaid plans with UPI
@@ -276,7 +280,11 @@ class HomeRoute extends Component {
                         value={searchInput}
                         onChange={this.changeSearchInput}
                       />
-                      <SearchBtn type="button" onClick={this.OnClickSearch}>
+                      <SearchBtn
+                        type="button"
+                        onClick={this.OnClickSearch}
+                        data-testid="searchButton"
+                      >
                         <AiOutlineSearch color={textColor} />
                       </SearchBtn>
                     </HomeSearchContainer>

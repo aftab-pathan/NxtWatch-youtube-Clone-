@@ -27,6 +27,12 @@ import {
   HomeLargeLeftOptionsContainer,
   HomeLargeLeftOptions,
   OptionsText,
+  ModalContainerLogout,
+  LogoutPopupHeading,
+  LogoutPopupBtnContainer,
+  LogoutCancelBtn,
+  LogoutConfirmBtn,
+  NAvListEle,
 } from './styledComponent'
 
 const Header = props => {
@@ -49,95 +55,158 @@ const Header = props => {
           <NavbarContainer bgColor={bgColor}>
             <Link to="/">
               <MenuBtn type="button">
-                <Logo src={logoSrc} alt="Website Logo" />
+                <Logo src={logoSrc} alt="website logo" />
               </MenuBtn>
             </Link>
             <NavMobileMenuContainer>
-              <MenuBtn type="button" onClick={changeTheme}>
-                {isDark ? (
-                  <WiDaySunny size={30} color="#f9f9f9" />
-                ) : (
-                  <RiMoonFill size={30} />
-                )}
-              </MenuBtn>
-              <Popup
-                modal
-                trigger={
-                  <MenuBtn type="button">
-                    <GiHamburgerMenu size={30} color={textColor} />
-                  </MenuBtn>
-                }
-                className="popup-content"
-              >
-                {close => (
-                  <ModalContainer bgColor={bgColor}>
-                    <CloseButton
-                      type="button"
-                      data-testid="closeButton"
-                      onClick={() => close()}
-                    >
-                      <IoMdClose size="30" color={textColor} />
-                    </CloseButton>
+              <NAvListEle>
+                <MenuBtn
+                  type="button"
+                  onClick={changeTheme}
+                  data-testid="theme"
+                >
+                  {isDark ? (
+                    <WiDaySunny size={30} color="#f9f9f9" />
+                  ) : (
+                    <RiMoonFill size={30} />
+                  )}
+                </MenuBtn>
+              </NAvListEle>
+              <NAvListEle>
+                <Popup
+                  modal
+                  trigger={
+                    <MenuBtn type="button">
+                      <GiHamburgerMenu size={30} color={textColor} />
+                    </MenuBtn>
+                  }
+                  className="popup-content"
+                >
+                  {close => (
+                    <ModalContainer bgColor={bgColor}>
+                      <CloseButton
+                        type="button"
+                        data-testid="closeButton"
+                        onClick={() => close()}
+                      >
+                        <IoMdClose size="30" color={textColor} />
+                      </CloseButton>
 
-                    <HomeLargeLeftOptionsContainer>
-                      <Link to="/">
-                        <HomeLargeLeftOptions>
-                          <AiFillHome size={22} color={textColor} />
-                          <OptionsText textColor={textColor}>Home</OptionsText>
-                        </HomeLargeLeftOptions>
-                      </Link>
-                      <Link to="/trending">
-                        <HomeLargeLeftOptions>
-                          <AiFillFire size={22} color={textColor} />
-                          <OptionsText textColor={textColor}>
-                            Trending
-                          </OptionsText>
-                        </HomeLargeLeftOptions>
-                      </Link>
-                      <Link to="/gaming">
-                        <HomeLargeLeftOptions>
-                          <SiYoutubegaming size={22} color={textColor} />
-                          <OptionsText textColor={textColor}>
-                            Gaming
-                          </OptionsText>
-                        </HomeLargeLeftOptions>
-                      </Link>
-                      <Link to="/saved-videos">
-                        <HomeLargeLeftOptions>
-                          <MdPlaylistAdd size={22} color={textColor} />
-                          <OptionsText textColor={textColor}>
-                            Saved videos
-                          </OptionsText>
-                        </HomeLargeLeftOptions>
-                      </Link>
-                    </HomeLargeLeftOptionsContainer>
-                  </ModalContainer>
-                )}
-              </Popup>
+                      <HomeLargeLeftOptionsContainer>
+                        <Link to="/">
+                          <HomeLargeLeftOptions>
+                            <AiFillHome size={22} color={textColor} />
+                            <OptionsText textColor={textColor}>
+                              Home
+                            </OptionsText>
+                          </HomeLargeLeftOptions>
+                        </Link>
+                        <Link to="/trending">
+                          <HomeLargeLeftOptions>
+                            <AiFillFire size={22} color={textColor} />
+                            <OptionsText textColor={textColor}>
+                              Trending
+                            </OptionsText>
+                          </HomeLargeLeftOptions>
+                        </Link>
+                        <Link to="/gaming">
+                          <HomeLargeLeftOptions>
+                            <SiYoutubegaming size={22} color={textColor} />
+                            <OptionsText textColor={textColor}>
+                              Gaming
+                            </OptionsText>
+                          </HomeLargeLeftOptions>
+                        </Link>
+                        <Link to="/saved-videos">
+                          <HomeLargeLeftOptions>
+                            <MdPlaylistAdd size={22} color={textColor} />
+                            <OptionsText textColor={textColor}>
+                              Saved videos
+                            </OptionsText>
+                          </HomeLargeLeftOptions>
+                        </Link>
+                      </HomeLargeLeftOptionsContainer>
+                    </ModalContainer>
+                  )}
+                </Popup>
+              </NAvListEle>
 
-              <MenuBtn type="button" onClick={onClickLogout}>
-                <FiLogOut size={30} color={textColor} />
-              </MenuBtn>
+              <NAvListEle>
+                <Popup
+                  modal
+                  trigger={
+                    <MenuBtn type="button">
+                      <FiLogOut size={30} color={textColor} />
+                    </MenuBtn>
+                  }
+                  className="popup-content-logout"
+                >
+                  {close => (
+                    <ModalContainerLogout bgColor={bgColor}>
+                      <LogoutPopupHeading>
+                        Are you sure, you want to logout
+                      </LogoutPopupHeading>
+                      <LogoutPopupBtnContainer>
+                        <LogoutCancelBtn onClick={() => close()}>
+                          Cancel
+                        </LogoutCancelBtn>
+                        <LogoutConfirmBtn onClick={onClickLogout}>
+                          Confirm
+                        </LogoutConfirmBtn>
+                      </LogoutPopupBtnContainer>
+                    </ModalContainerLogout>
+                  )}
+                </Popup>
+              </NAvListEle>
             </NavMobileMenuContainer>
+
             <NavLargeMenuContainer>
-              <MenuBtn type="button" onClick={changeTheme}>
-                {isDark ? (
-                  <WiDaySunny size={30} color="#f9f9f9" />
-                ) : (
-                  <RiMoonFill size={30} />
-                )}
-              </MenuBtn>
-              <Profile
-                src="https://assets.ccbp.in/frontend/react-js/nxt-watch-profile-img.png"
-                alt="profile"
-              />
-              <LogoutBtn
-                type="button"
-                onClick={onClickLogout}
-                btnColor={btnColor}
-              >
-                Logout
-              </LogoutBtn>
+              <NAvListEle>
+                <MenuBtn type="button" onClick={changeTheme}>
+                  {isDark ? (
+                    <WiDaySunny size={30} color="#f9f9f9" />
+                  ) : (
+                    <RiMoonFill size={30} />
+                  )}
+                </MenuBtn>
+              </NAvListEle>
+              <NAvListEle>
+                <Profile
+                  src="https://assets.ccbp.in/frontend/react-js/nxt-watch-profile-img.png"
+                  alt="profile"
+                />
+              </NAvListEle>
+              <NAvListEle>
+                <Popup
+                  modal
+                  trigger={
+                    <LogoutBtn
+                      type="button"
+                      onClick={onClickLogout}
+                      btnColor={btnColor}
+                    >
+                      Logout
+                    </LogoutBtn>
+                  }
+                  className="popup-content-logout"
+                >
+                  {close => (
+                    <ModalContainerLogout bgColor={bgColor}>
+                      <LogoutPopupHeading>
+                        Are you sure, you want to logout
+                      </LogoutPopupHeading>
+                      <LogoutPopupBtnContainer>
+                        <LogoutCancelBtn onClick={() => close()}>
+                          Cancel
+                        </LogoutCancelBtn>
+                        <LogoutConfirmBtn onClick={onClickLogout}>
+                          Confirm
+                        </LogoutConfirmBtn>
+                      </LogoutPopupBtnContainer>
+                    </ModalContainerLogout>
+                  )}
+                </Popup>
+              </NAvListEle>
             </NavLargeMenuContainer>
           </NavbarContainer>
         )

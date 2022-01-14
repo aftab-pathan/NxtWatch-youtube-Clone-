@@ -4,10 +4,16 @@ import {Link} from 'react-router-dom'
 
 import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
-import {MdPlaylistAdd} from 'react-icons/md'
+import {MdPlaylistAdd, MdPlaylistAddCheck} from 'react-icons/md'
 import {SiYoutubegaming} from 'react-icons/si'
-import {AiFillHome, AiFillFire, AiOutlineLike} from 'react-icons/ai'
-import {BiDislike} from 'react-icons/bi'
+import {
+  AiFillHome,
+  AiFillFire,
+  AiOutlineLike,
+  AiFillLike,
+  AiFillDislike,
+  AiOutlineDislike,
+} from 'react-icons/ai'
 import nxtWatchContext from '../../Context/nxtWatchContext'
 import Header from '../Header'
 
@@ -44,6 +50,11 @@ import {
   ChannelSub,
   VideoDescription,
   LoaderContainer,
+  FailureContainer,
+  FailureImg,
+  Heading,
+  Description,
+  RetryBtn,
 } from './styledComponent'
 
 const apiStatusConstant = {
@@ -52,11 +63,19 @@ const apiStatusConstant = {
   failure: 'FAILURE',
   initial: 'INITIAL',
 }
+// const likeStatusConstant = {
+//   like: 'LIKE',
+//   disLike: 'DISLIKE',
+//   initial: 'INITIAL',
+// }
 
 class VideoItemDetailsRoute extends Component {
   state = {
     videoData: [],
     apiStatus: apiStatusConstant.initial,
+    isLiked: false,
+    isDisLiked: false,
+    isSave: false,
   }
 
   componentDidMount() {
@@ -107,8 +126,22 @@ class VideoItemDetailsRoute extends Component {
     }
   }
 
+  OnClickLikeBtn = () => {
+    this.setState(prevState => ({
+      isLiked: !prevState.isLiked,
+      isDisLiked: prevState.isLiked,
+    }))
+  }
+
+  OnClickDisLikeBtn = () => {
+    this.setState(prevState => ({
+      isDisLiked: !prevState.isDisLiked,
+      isLiked: prevState.isDisLiked,
+    }))
+  }
+
   renderSuccessView = () => {
-    const {videoData} = this.state
+    const {videoData, isLiked, isDisLiked, isSave} = this.state
     const {
       videoUrl,
       channel,
@@ -150,10 +183,50 @@ class VideoItemDetailsRoute extends Component {
           const {updateSavedVideo} = value
           const saveVideo = () => {
             updateSavedVideo(videoData)
+            this.setState(prevState => ({isSave: !prevState.isSave}))
           }
+          const {isDark} = value
+          const bgMainColor = isDark ? '#0f0f0f' : '#f9f9f9'
+          const textColor = isDark ? '#f9f9f9' : '#181818'
+          const LikeLogo = isLiked ? (
+            <>
+              <AiFillLike size={22} color="#2563eb" />
+              <BtnText textColor="#2563eb">Like</BtnText>{' '}
+            </>
+          ) : (
+            <>
+              <AiOutlineLike size={22} color="#64748b" />
+              <BtnText textColor="#64748b">Like</BtnText>
+            </>
+          )
+          const disLikeLogo = isDisLiked ? (
+            <>
+              <AiFillDislike size={22} color="#2563eb" />
+              <BtnText textColor="#2563eb">Dislike</BtnText>
+            </>
+          ) : (
+            <>
+              <AiOutlineDislike size={22} color="#64748b" />
+              <BtnText textColor="#64748b">Dislike</BtnText>
+            </>
+          )
+          const savePlaylistLogo = isSave ? (
+            <>
+              <MdPlaylistAddCheck size={22} color="#2563eb" />
+              <BtnText textColor="#2563eb">Saved</BtnText>
+            </>
+          ) : (
+            <>
+              <MdPlaylistAdd size={22} color="#64748b" />
+              <BtnText textColor="#64748b">Save</BtnText>
+            </>
+          )
           return (
             <>
-              <VideoDetailsContainer>
+              <VideoDetailsContainer
+                bgColor={bgMainColor}
+                data-testid="videoItemDetails"
+              >
                 <VideoPlayerContainer>
                   <ReactPlayer
                     url={videoUrl}
@@ -164,27 +237,24 @@ class VideoItemDetailsRoute extends Component {
                 </VideoPlayerContainer>
 
                 <VideoDetailsRightContainer>
-                  <VideoName>{title}</VideoName>
+                  <VideoName textColor={textColor}>{title}</VideoName>
                   <VideoMenu>
                     <VideoSmallDetailsRightBottom>
-                      <VideoDetailsListName key="views">{`${viewCount} views`}</VideoDetailsListName>
-                      <VideoDetailsList key="time">
+                      <VideoDetailsListName>{`${viewCount} views`}</VideoDetailsListName>
+                      <VideoDetailsList>
                         {timeAgo(publishedAt)}
                       </VideoDetailsList>
                     </VideoSmallDetailsRightBottom>
 
                     <VideoLikeSaveContainer>
-                      <LikeSaveBtn>
-                        <AiOutlineLike size={22} color="#616e7c" />
-                        <BtnText>Like</BtnText>
+                      <LikeSaveBtn onClick={this.OnClickLikeBtn}>
+                        {LikeLogo}
                       </LikeSaveBtn>
-                      <LikeSaveBtn>
-                        <BiDislike size={22} color="#616e7c" />
-                        <BtnText>Dislike</BtnText>
+                      <LikeSaveBtn onClick={this.OnClickDisLikeBtn}>
+                        {disLikeLogo}
                       </LikeSaveBtn>
                       <LikeSaveBtn onClick={saveVideo}>
-                        <MdPlaylistAdd size={22} color="#616e7c" />
-                        <BtnText>Save</BtnText>
+                        {savePlaylistLogo}
                       </LikeSaveBtn>
                     </VideoLikeSaveContainer>
                   </VideoMenu>
@@ -192,7 +262,10 @@ class VideoItemDetailsRoute extends Component {
 
                   <ChannelDetailsMobile>
                     <ChannelNameLogo>
-                      <ChannelLogo src={channel.profile_image_url} alt="" />
+                      <ChannelLogo
+                        src={channel.profile_image_url}
+                        alt="channel logo"
+                      />
                       <ChannelDetailsRight>
                         <ChannelName>{channel.name}</ChannelName>
                         <ChannelSub>{`${channel.subscriber_count} subscribes`}</ChannelSub>
@@ -203,7 +276,10 @@ class VideoItemDetailsRoute extends Component {
 
                   <ChannelDetailsLarge>
                     <ChannelNameLogo>
-                      <ChannelLogo src={channel.profile_image_url} alt="" />
+                      <ChannelLogo
+                        src={channel.profile_image_url}
+                        alt="channel logo"
+                      />
                       <ChannelDetailsRight>
                         <ChannelName>{channel.name}</ChannelName>
                         <ChannelSub>{`${channel.subscriber_count} subscribes`}</ChannelSub>
@@ -226,6 +302,34 @@ class VideoItemDetailsRoute extends Component {
     </LoaderContainer>
   )
 
+  onClickFailRetry = () => {
+    this.getVideoData()
+  }
+
+  renderFailureView = () => (
+    <nxtWatchContext.Consumer>
+      {value => {
+        const {isDark} = value
+        const failSrc = isDark
+          ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-dark-theme-img.png'
+          : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
+        return (
+          <FailureContainer>
+            <FailureImg src={failSrc} alt="failure view" />
+            <Heading>Oops! Something Went Wrong</Heading>
+            <Description>
+              We are having some trouble to complete your request. Please try
+              again.
+            </Description>
+            <RetryBtn type="button" onClick={this.onClickFailRetry}>
+              Retry
+            </RetryBtn>
+          </FailureContainer>
+        )
+      }}
+    </nxtWatchContext.Consumer>
+  )
+
   finalRenderView = () => {
     const {apiStatus} = this.state
     switch (apiStatus) {
@@ -242,62 +346,75 @@ class VideoItemDetailsRoute extends Component {
 
   render() {
     return (
-      <>
-        <Header />
-        <HomeBgContainer>
-          <HomeLargeLeftBottomContainer>
-            <HomeLargeLeftOptionsContainer>
-              <Link to="/">
-                <HomeLargeLeftOptions>
-                  <AiFillHome size={22} /> <OptionsText>Home</OptionsText>
-                </HomeLargeLeftOptions>
-              </Link>
-              <Link to="/trending">
-                <HomeLargeLeftOptions>
-                  <AiFillFire size={22} />
-                  <OptionsText>Trending</OptionsText>
-                </HomeLargeLeftOptions>
-              </Link>
-              <Link to="/gaming">
-                <HomeLargeLeftOptions>
-                  <SiYoutubegaming size={22} />
-                  <OptionsText>Gaming</OptionsText>
-                </HomeLargeLeftOptions>
-              </Link>
-              <Link to="/saved-videos">
-                <HomeLargeLeftOptions>
-                  <MdPlaylistAdd size={22} />
-                  <OptionsText>Saved videos</OptionsText>
-                </HomeLargeLeftOptions>
-              </Link>
-            </HomeLargeLeftOptionsContainer>
-            <HomeLargeLeftContactContainer>
-              <ContactText>CONTACT US</ContactText>
-              <ContactLogoContainer>
-                <ContactLogo
-                  src="https://assets.ccbp.in/frontend/react-js/nxt-watch-facebook-logo-img.png"
-                  alt="facebook logo"
-                />
-                <ContactLogo
-                  src="https://assets.ccbp.in/frontend/react-js/nxt-watch-twitter-logo-img.png"
-                  alt="twitter logo"
-                />
-                <ContactLogo
-                  src="https://assets.ccbp.in/frontend/react-js/nxt-watch-linked-in-logo-img.png"
-                  alt="linked in logo"
-                />
-              </ContactLogoContainer>
-              <ContactDescription>
-                Enjoy! Now to see your channels and recommendations!
-              </ContactDescription>
-            </HomeLargeLeftContactContainer>
-          </HomeLargeLeftBottomContainer>
-
-          <HomeLargeRightBottomContainer>
-            {this.finalRenderView()}
-          </HomeLargeRightBottomContainer>
-        </HomeBgContainer>
-      </>
+      <nxtWatchContext.Consumer>
+        {value => {
+          const {isDark} = value
+          const bgColor = isDark ? '#181818' : '#f9f9f9'
+          const textColor = isDark ? '#f9f9f9' : '#181818'
+          return (
+            <>
+              <Header />
+              <HomeBgContainer bgColor={bgColor} data-testid="videoItemDetails">
+                <HomeLargeLeftBottomContainer>
+                  <HomeLargeLeftOptionsContainer>
+                    <Link to="/">
+                      <HomeLargeLeftOptions>
+                        <AiFillHome size={22} color={textColor} />{' '}
+                        <OptionsText textColor={textColor}>Home</OptionsText>
+                      </HomeLargeLeftOptions>
+                    </Link>
+                    <Link to="/trending">
+                      <HomeLargeLeftOptions>
+                        <AiFillFire size={22} color={textColor} />
+                        <OptionsText textColor={textColor}>
+                          Trending
+                        </OptionsText>
+                      </HomeLargeLeftOptions>
+                    </Link>
+                    <Link to="/gaming">
+                      <HomeLargeLeftOptions>
+                        <SiYoutubegaming size={22} color={textColor} />
+                        <OptionsText textColor={textColor}>Gaming</OptionsText>
+                      </HomeLargeLeftOptions>
+                    </Link>
+                    <Link to="/saved-videos">
+                      <HomeLargeLeftOptions>
+                        <MdPlaylistAdd size={22} color={textColor} />
+                        <OptionsText textColor={textColor}>
+                          Saved videos
+                        </OptionsText>
+                      </HomeLargeLeftOptions>
+                    </Link>
+                  </HomeLargeLeftOptionsContainer>
+                  <HomeLargeLeftContactContainer>
+                    <ContactText textColor={textColor}>CONTACT US</ContactText>
+                    <ContactLogoContainer>
+                      <ContactLogo
+                        src="https://assets.ccbp.in/frontend/react-js/nxt-watch-facebook-logo-img.png"
+                        alt="facebook logo"
+                      />
+                      <ContactLogo
+                        src="https://assets.ccbp.in/frontend/react-js/nxt-watch-twitter-logo-img.png"
+                        alt="twitter logo"
+                      />
+                      <ContactLogo
+                        src="https://assets.ccbp.in/frontend/react-js/nxt-watch-linked-in-logo-img.png"
+                        alt="linked in logo"
+                      />
+                    </ContactLogoContainer>
+                    <ContactDescription textColor={textColor}>
+                      Enjoy! Now to see your channels and recommendations!
+                    </ContactDescription>
+                  </HomeLargeLeftContactContainer>
+                </HomeLargeLeftBottomContainer>
+                <HomeLargeRightBottomContainer>
+                  {this.finalRenderView()}
+                </HomeLargeRightBottomContainer>
+              </HomeBgContainer>
+            </>
+          )
+        }}
+      </nxtWatchContext.Consumer>
     )
   }
 }

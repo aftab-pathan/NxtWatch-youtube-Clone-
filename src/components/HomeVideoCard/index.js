@@ -58,34 +58,31 @@ const HomeVideoCard = props => {
     <nxtWatchContext.Consumer>
       {value => {
         const {isDark} = value
-        const bgColor = isDark ? '#181818' : '#f9f9f9'
         const textColor = isDark ? '#f9f9f9' : '#181818'
-        const btnColor = isDark ? '#f9f9f9' : '#3b82f6'
         return (
           <VideoListItem>
             <Link to={`/videos/${id}`}>
               <Thumbnail src={thumbnailUrl} alt="video thumbnail" />
               <VideoDetailsContainer>
-                <VideoProfile src={channel.profile_image_url} />
+                <VideoProfile
+                  src={channel.profile_image_url}
+                  alt="channel logo"
+                />
                 <VideoDetailsRightContainer>
                   <VideoName textColor={textColor}>{title}</VideoName>
                   <VideoSmallDetailsRightBottom>
-                    <VideoDetailsListName key="name">
-                      {channel.name}
-                    </VideoDetailsListName>
-                    <VideoDetailsList key="views">{`${viewCount} views`}</VideoDetailsList>
-                    <VideoDetailsList key="time">
-                      {timeAgo(publishedAt)}
-                    </VideoDetailsList>
+                    <VideoDetailsListName>{channel.name}</VideoDetailsListName>
+                    <VideoDetailsList>{`${viewCount} views`}</VideoDetailsList>
+                    <VideoDetailsList>{timeAgo(publishedAt)}</VideoDetailsList>
                   </VideoSmallDetailsRightBottom>
 
                   <VideoLargeDetailsRightBottom>
-                    <VideoDetailsLargeName key="name">
+                    <VideoDetailsLargeName>
                       {channel.name}
                     </VideoDetailsLargeName>
                     <VideoLarge2DetailsRightBottom>
-                      <VideoDetailsListName key="views">{`${viewCount} views`}</VideoDetailsListName>
-                      <VideoDetailsList key="time">
+                      <VideoDetailsListName>{`${viewCount} views`}</VideoDetailsListName>
+                      <VideoDetailsList>
                         {timeAgo(publishedAt)}
                       </VideoDetailsList>
                     </VideoLarge2DetailsRightBottom>

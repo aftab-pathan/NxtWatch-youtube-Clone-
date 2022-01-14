@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const HomeBgContainer = styled.div`
-  background-color: #f8fafc;
+  background-color: ${props => props.bgColor};
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -14,7 +14,7 @@ export const HomeBgContainer = styled.div`
 `
 export const PremiumBanner = styled.div`
   display: flex;
-  background-color: #ebebeb;
+  background-color: ${props => props.bgBannerColor};
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
@@ -30,10 +30,10 @@ export const PremiumLeftContainer = styled.button`
   margin-right: 15px;
 `
 
-export const PremiumBannerText = styled.p`
+export const PremiumBannerText = styled.h1`
   font-size: 22px;
   font-weight: 700;
-  color: #181818;
+  color: ${props => props.textColor};
 `
 
 export const HomeBottomContainer = styled.div`
@@ -42,7 +42,7 @@ export const HomeBottomContainer = styled.div`
   justify-content: center;
   align-items: flex-start;
   width: 100%;
-  background-color: #f1f5f9;
+  background-color: ${props => props.bgMainColor};
   @media (min-width: 768px) {
     padding: 30px;
   }
@@ -106,7 +106,7 @@ export const HomeLargeLeftOptions = styled.div`
 export const OptionsText = styled.p`
   font-size: 18px;
   font-weight: 400;
-  color: #181818;
+  color: ${props => props.textColor};
   margin-left: 15px;
 `
 
@@ -118,10 +118,10 @@ export const HomeLargeLeftContactContainer = styled.div`
   width: 100%;
   padding-left: 15px;
 `
-export const ContactText = styled.h1`
+export const ContactText = styled.p`
   font-size: 20px;
   font-weight: 600;
-  color: #181818;
+  color: ${props => props.textColor};
 `
 
 export const ContactLogoContainer = styled.div`
@@ -141,7 +141,7 @@ export const ContactLogo = styled.img`
 export const ContactDescription = styled.p`
   font-size: 16px;
   font-weight: 500;
-  color: #181818;
+  color: ${props => props.textColor};
 `
 export const LoaderContainer = styled.div`
   display: flex;
@@ -173,13 +173,13 @@ export const Heading = styled.h1`
   font-size: 18px;
   font-weight: 500;
   margin-bottom: 10px;
-  color: #181818;
+  color: ${props => props.textColor};
 `
 export const Description = styled.p`
   font-size: 16px;
   font-weight: 500;
   margin-bottom: 15px;
-  color: #616e7c;
+  color: ${props => props.textColor};
 `
 
 export const RetryBtn = styled.button`

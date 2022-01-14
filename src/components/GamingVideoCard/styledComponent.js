@@ -39,10 +39,10 @@ export const VideoDetailsRightContainer = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
 `
-export const VideoName = styled.h1`
+export const VideoName = styled.p`
   font-size: 16px;
   font-weight: 800;
-  color: #231f20;
+  color: ${props => props.textColor};
   margin-bottom: 5px;
   @media (min-width: 576px) {
     font-size: 20px;
@@ -59,7 +59,7 @@ export const VideoSmallDetailsRightBottom = styled.ul`
   }
 `
 
-export const VideoDetailsList = styled.li`
+export const VideoDetailsList = styled.p`
   display: flex;
   font-size: 12px;
   font-weight: 400;

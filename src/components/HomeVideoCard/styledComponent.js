@@ -40,7 +40,7 @@ export const VideoDetailsRightContainer = styled.div`
   justify-content: center;
   align-items: flex-start;
 `
-export const VideoName = styled.h1`
+export const VideoName = styled.p`
   font-size: 15px;
   font-weight: 400;
   color: ${props => props.textColor};
@@ -56,7 +56,7 @@ export const VideoSmallDetailsRightBottom = styled.ul`
     display: none;
   }
 `
-export const VideoDetailsListName = styled.li`
+export const VideoDetailsListName = styled.p`
   display: flex;
   font-size: 12px;
   font-weight: 500;
@@ -76,7 +76,7 @@ export const VideoDetailsLargeName = styled.p`
     margin-bottom: 10px;
   }
 `
-export const VideoDetailsList = styled.li`
+export const VideoDetailsList = styled.p`
   font-size: 12px;
   font-weight: 500;
   color: #424242;

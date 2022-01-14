@@ -156,7 +156,7 @@ export const HomeLargeLeftContactContainer = styled.div`
   width: 100%;
   padding-left: 15px;
 `
-export const ContactText = styled.h1`
+export const ContactText = styled.p`
   font-size: 20px;
   color: ${props => props.textColor};
   font-weight: 600;

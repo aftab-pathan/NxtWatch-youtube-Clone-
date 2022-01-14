@@ -31,6 +31,12 @@ class App extends Component {
       this.setState(prevState => ({
         savedVideoData: [...prevState.savedVideoData, videoData],
       }))
+    } else {
+      this.setState(prevState => ({
+        savedVideoData: prevState.savedVideoData.filter(
+          each => each.id !== videoData,
+        ),
+      }))
     }
   }
 

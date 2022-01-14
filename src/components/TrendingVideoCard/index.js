@@ -1,3 +1,5 @@
+import nxtWatchContext from '../../Context/nxtWatchContext'
+
 import {
   VideoListItem,
   Thumbnail,
@@ -52,36 +54,37 @@ const TrendingVideoCard = props => {
   }
 
   return (
-    <VideoListItem to={`/videos/${id}`}>
-      <Thumbnail src={thumbnailUrl} alt="video thumbnail" />
-      <VideoDetailsContainer>
-        <VideoProfile src={channel.profile_image_url} />
-        <VideoDetailsRightContainer>
-          <VideoName>{title}</VideoName>
-          <VideoSmallDetailsRightBottom>
-            <VideoDetailsListName key="name">
-              {channel.name}
-            </VideoDetailsListName>
-            <VideoDetailsList key="views">{`${viewCount} views`}</VideoDetailsList>
-            <VideoDetailsList key="time">
-              {timeAgo(publishedAt)}
-            </VideoDetailsList>
-          </VideoSmallDetailsRightBottom>
+    <nxtWatchContext.Consumer>
+      {value => {
+        const {isDark} = value
+        const textColor = isDark ? '#f9f9f9' : '#181818'
 
-          <VideoLargeDetailsRightBottom>
-            <VideoDetailsLargeName key="name">
-              {channel.name}
-            </VideoDetailsLargeName>
-            <VideoLarge2DetailsRightBottom>
-              <VideoDetailsListName key="views">{`${viewCount} views`}</VideoDetailsListName>
-              <VideoDetailsList key="time">
-                {timeAgo(publishedAt)}
-              </VideoDetailsList>
-            </VideoLarge2DetailsRightBottom>
-          </VideoLargeDetailsRightBottom>
-        </VideoDetailsRightContainer>
-      </VideoDetailsContainer>
-    </VideoListItem>
+        return (
+          <VideoListItem to={`/videos/${id}`}>
+            <Thumbnail src={thumbnailUrl} alt="video thumbnail" />
+            <VideoDetailsContainer>
+              <VideoProfile src={channel.profile_image_url} />
+              <VideoDetailsRightContainer>
+                <VideoName textColor={textColor}>{title}</VideoName>
+                <VideoSmallDetailsRightBottom>
+                  <VideoDetailsListName>{channel.name}</VideoDetailsListName>
+                  <VideoDetailsList>{`${viewCount} views`}</VideoDetailsList>
+                  <VideoDetailsList>{timeAgo(publishedAt)}</VideoDetailsList>
+                </VideoSmallDetailsRightBottom>
+
+                <VideoLargeDetailsRightBottom>
+                  <VideoDetailsLargeName>{channel.name}</VideoDetailsLargeName>
+                  <VideoLarge2DetailsRightBottom>
+                    <VideoDetailsListName>{`${viewCount} views`}</VideoDetailsListName>
+                    <VideoDetailsList>{timeAgo(publishedAt)}</VideoDetailsList>
+                  </VideoLarge2DetailsRightBottom>
+                </VideoLargeDetailsRightBottom>
+              </VideoDetailsRightContainer>
+            </VideoDetailsContainer>
+          </VideoListItem>
+        )
+      }}
+    </nxtWatchContext.Consumer>
   )
 }
 export default TrendingVideoCard

@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const LoginBgContainer = styled.div`
-  background-color: #f9f9f9;
+  background-color: ${props => props.bgColor};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -9,7 +9,7 @@ export const LoginBgContainer = styled.div`
 `
 export const LoginCard = styled.div`
   min-height: 400px;
-  background-color: #f8fafc;
+  background-color: ${props => props.bgCard};
   display: flex;
   flex-direction: column;
   justify-content: center;

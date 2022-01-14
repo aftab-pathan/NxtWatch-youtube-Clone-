@@ -1,5 +1,9 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
+import {Redirect} from 'react-router-dom'
+
+import nxtWatchContext from '../../Context/nxtWatchContext'
+
 import {
   LoginBgContainer,
   LoginCard,
@@ -65,41 +69,59 @@ class LoginRoute extends Component {
   render() {
     const {username, password, errMsg, showPass} = this.state
     const passType = showPass ? 'text' : 'password'
+    const jwtToken = Cookies.get('jwt_token')
     return (
-      <LoginBgContainer>
-        <LoginCard>
-          <LoginForm onSubmit={this.onSubmitForm}>
-            <Logo
-              src="https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png"
-              alt="website logo"
-            />
-            <Label htmlFor="username">USERNAME</Label>
-            <InputValue
-              type="text"
-              id="username"
-              value={username}
-              onChange={this.onChangeUsername}
-            />
-            <Label htmlFor="password">PASSWORD</Label>
-            <InputValue
-              type={passType}
-              id="password"
-              value={password}
-              onChange={this.onChangePassword}
-            />
-            <ShowPassContainer>
-              <InputCheckBox
-                type="checkbox"
-                id="showPass"
-                onChange={this.onChangeCheckBox}
-              />
-              <LabelCheckBox htmlFor="showPass">Show Password</LabelCheckBox>
-            </ShowPassContainer>
-            <LoginBtn type="submit">Login</LoginBtn>
-            {errMsg !== '' ? <ErrMsg>{`*${errMsg}`}</ErrMsg> : null}
-          </LoginForm>
-        </LoginCard>
-      </LoginBgContainer>
+      <>
+        {jwtToken !== undefined ? (
+          <Redirect to="/" />
+        ) : (
+          <nxtWatchContext.Consumer>
+            {value => {
+              const {isDark} = value
+              const bgColor = isDark ? '#181818' : '#f9f9f9'
+              const bgCard = isDark ? '#313131' : '#f9f9f9'
+              const logoSrc = isDark
+                ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-dark-theme-img.png'
+                : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png'
+              return (
+                <LoginBgContainer bgColor={bgColor}>
+                  <LoginCard bgCard={bgCard}>
+                    <LoginForm onSubmit={this.onSubmitForm}>
+                      <Logo src={logoSrc} alt="website logo" />
+                      <Label htmlFor="username">USERNAME</Label>
+                      <InputValue
+                        type="text"
+                        id="username"
+                        value={username}
+                        onChange={this.onChangeUsername}
+                      />
+                      <Label htmlFor="password">PASSWORD</Label>
+                      <InputValue
+                        type={passType}
+                        id="password"
+                        value={password}
+                        onChange={this.onChangePassword}
+                      />
+                      <ShowPassContainer>
+                        <InputCheckBox
+                          type="checkbox"
+                          id="showPass"
+                          onChange={this.onChangeCheckBox}
+                        />
+                        <LabelCheckBox htmlFor="showPass">
+                          Show Password
+                        </LabelCheckBox>
+                      </ShowPassContainer>
+                      <LoginBtn type="submit">Login</LoginBtn>
+                      {errMsg !== '' ? <ErrMsg>{`*${errMsg}`}</ErrMsg> : null}
+                    </LoginForm>
+                  </LoginCard>
+                </LoginBgContainer>
+              )
+            }}
+          </nxtWatchContext.Consumer>
+        )}
+      </>
     )
   }
 }
